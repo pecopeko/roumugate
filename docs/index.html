@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROUMUGATE 労務門 | 2024年4月改正 労働条件通知書・固定残業代差額・月60時間超50%＆36協定2〜6ヶ月平均80時間監査</title>
+  <meta name="description" content="ブラウザ完結・通信ゼロで2024年4月改正の労働条件通知書（変更の範囲・更新上限・無期転換）、固定残業代有効性、月60時間超1.50倍割増・最低賃金・36協定複数月80時間平均を一括監査します。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="masthead" data-ui="masthead">
+      <div class="brand-lockup">
+        <span class="hanko-seal" aria-hidden="true">労務</span>
+        <div>
+          <h1>ROUMUGATE <span class="title-sub">労務門</span></h1>
+          <p class="subtitle">2024年4月改正 労働条件通知書（変更の範囲・無期転換）・固定残業代3要件・60時間超1.50倍＆36協定（2〜6ヶ月80h平均）監査</p>
+        </div>
+      </div>
+      <div class="trust-badges">
+        <span class="trust-pill" data-ui="badge">100% ブラウザローカル判定</span>
+        <span class="trust-pill" data-ui="badge">人事給与データ送信ゼロ</span>
+      </div>
+    </header>
+
+    <main class="workspace-grid">
+      <section class="panel input-panel" data-ui="panel">
+        <div class="panel-head">
+          <h2>1. 労働条件通知書・固定残業文面の診断</h2>
+          <div class="preset-actions">
+            <button type="button" id="btn-sample-risk" class="btn-secondary" data-ui="btn">不備サンプル読込</button>
+            <button type="button" id="btn-sample-ok" class="btn-secondary" data-ui="btn">2024年改正準拠サンプル</button>
+          </div>
+        </div>
+
+        <label class="field-block">
+          労働条件通知書・雇用契約書テキスト
+          <textarea id="input-notice" rows="7"></textarea>
+        </label>
+
+        <div class="run-bar">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="chk-fixed-term" />
+            <span>有期契約として「更新上限・無期転換」をチェック</span>
+          </label>
+          <button type="button" id="btn-audit-notice" class="btn-primary" data-ui="btn">通知書を診断＋ひな形生成</button>
+        </div>
+
+        <hr class="spacer-rule" data-ui="rule" />
+
+        <div class="panel-head">
+          <h2>2. 固定残業・月60時間超50%・最低賃金計算</h2>
+          <button type="button" id="btn-calc-ot" class="btn-secondary" data-ui="btn">割増・差額を計算</button>
+        </div>
+        <div class="meta-grid">
+          <label>基本給＋固定諸手当（円）<input id="in-base" type="number" value="240000" /></label>
+          <label>月所定労働時間<input id="in-sched" type="number" value="160" /></label>
+          <label>固定残業代手当額（円）<input id="in-fixed-pay" type="number" value="45000" /></label>
+          <label>固定残業見込時間（h）<input id="in-fixed-hrs" type="number" value="25" /></label>
+          <label>実残業時間（h）<input id="in-act-ot" type="number" value="65" /></label>
+          <label>適用地域最低賃金（円/h）<input id="in-min-wage" type="number" value="1163" /></label>
+        </div>
+        <div id="ot-result-box" class="notice-box" data-ui="notice">計算ボタンを押すと法定割増額と不足差額を表示します。</div>
+      </section>
+
+      <section class="panel output-panel" data-ui="panel">
+        <div class="panel-head">
+          <h2>3. 診断結果・36協定 12ヶ月チェック</h2>
+          <div id="notice-badge" class="score-pill" data-ui="score-pill">未診断</div>
+        </div>
+
+        <div class="summary-strip" data-ui="summary-strip">
+          <div class="metric-cell" data-ui="metric">
+            <span class="metric-label">通知書スコア</span>
+            <strong id="m-score" class="metric-val">—</strong>
+          </div>
+          <div class="metric-cell" data-ui="metric">
+            <span class="metric-label">不足割増差額</span>
+            <strong id="m-shortfall" class="metric-val">—</strong>
+          </div>
+          <div class="metric-cell" data-ui="metric">
+            <span class="metric-label">36協定最大平均</span>
+            <strong id="m-rolling" class="metric-val">—</strong>
+          </div>
+        </div>
+
+        <h3>契約書面の指摘事項</h3>
+        <div id="findings-list" class="findings-list"></div>
+
+        <div class="draft-head">
+          <h3>4. 36協定 12ヶ月残業時間チェック（カンマ区切り・最大12か月分）</h3>
+          <button type="button" id="btn-audit-36" class="btn-secondary" data-ui="btn">36協定を検査</button>
+        </div>
+        <input id="in-36-months" type="text" value="40, 42, 78, 85, 82, 44, 35, 50, 48, 30, 38, 41" />
+        <div id="36-result-box" class="notice-box" data-ui="notice">月45h超回数・年720h・単月100h・2〜6か月移動平均80h超を一括検証します。</div>
+
+        <div class="draft-head">
+          <h3>2024年改正準拠 労働条件通知書テンプレート</h3>
+          <button type="button" id="btn-copy-tpl" class="btn-secondary" data-ui="btn">テンプレをコピー</button>
+        </div>
+        <pre id="tpl-output" class="code-box"><code></code></pre>
+      </section>
+    </main>
+
+    <footer class="site-footer" data-ui="footer">
+      <p>ROUMUGATE 労務門 — Horizon-Money Studio Track 2（完全クライアントサイド実行・通信ゼロ・個別紛争の最終判断は社会保険労務士・弁護士へご相談ください）</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
